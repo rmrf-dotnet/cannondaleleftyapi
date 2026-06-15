@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Catalog — Cannondale Lefty{% endblock %}
+{% block content %}
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
+    <div class="mb-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-ocean/10 border border-ocean/20 text-ocean text-xs font-semibold tracking-wider uppercase mb-4">
+            Full Lineup
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-2">All Models</h1>
+        <p class="text-sm text-slate-500">{{ models|length }} bikes across every Lefty category</p>
+    </div>
+
+    <div class="mb-8 max-w-2xl">
+        <div class="flex">
+            <input type="text" id="catalogFilter" placeholder="Filter by any spec — frame, groupset, brakes, wheels..." class="w-full bg-charcoal border border-steel px-5 py-3.5 text-white text-sm focus:outline-none focus:border-ocean transition-all placeholder:text-muted-600">
+            <div class="bg-gradient-to-r from-ocean to-sky px-5 py-3.5 flex items-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div id="resultCount" class="text-xs text-slate-500 mb-6 font-medium"></div>
+
+    <div id="catalogGrid" class="card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for model in models %}
+        <a href="/model/{{ model.category_slug }}/{{ model.model_name }}"
+           class="card-item catalog-card group block bg-charcoal border border-steel card-hover"
+           data-search="{{ model.model_name }} {{ model.category_name }} {% for v in model.specs.values() %}{% if v is string %}{{ v }} {% endif %}{% endfor %}">
+            <div class="aspect-[16/10] bg-gradient-to-br from-charcoal to-dark-end flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-ocean/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {% if model.specs.image %}
+                <img src="{{ url_for('static', filename='images/placeholders/' + model.specs.image) }}" alt="{{ model.model_name }}" class="w-full h-full object-cover absolute inset-0">
+                {% else %}
+                <div class="text-center">
+                    <svg class="w-12 h-12 mx-auto text-steel group-hover:text-ocean/40 transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke-width="1"/>
+                    </svg>
+                    <p class="text-[10px] text-muted-600 mt-2 tracking-wider uppercase font-medium">Image Placeholder</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="p-5 gradient-border">
+                <span class="text-[10px] font-semibold text-ocean uppercase tracking-wider">{{ model.category_name }}</span>
+                <h3 class="text-base font-bold text-white group-hover:text-sky transition-colors leading-tight mt-1">{{ model.model_name }}</h3>
+                <div class="flex items-center gap-4 mt-3 text-xs text-slate-500">
+                    {% if model.specs.travel_front_mm is defined and model.specs.travel_front_mm > 0 %}
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        {{ model.specs.travel_front_mm }}mm
+                    </span>
+                    {% endif %}
+                    {% if model.specs.frame and 'Carbon' in model.specs.frame %}
+                    <span class="text-ocean/70 font-medium">Carbon</span>
+                    {% elif model.specs.frame and 'Alloy' in model.specs.frame %}
+                    <span class="text-slate-500 font-medium">Alloy</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var input = document.getElementById('catalogFilter');
+    var cards = document.querySelectorAll('.catalog-card');
+    var count = document.getElementById('resultCount');
+
+    function filter() {
+        var q = input.value.toLowerCase().trim();
+        var visible = 0;
+        cards.forEach(function(card) {
+            var data = card.getAttribute('data-search').toLowerCase();
+            var match = !q || data.indexOf(q) !== -1;
+            card.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        count.textContent = q ? visible + ' of ' + cards.length + ' models match' : 'Showing all ' + cards.length + ' models';
+    }
+
+    input.addEventListener('input', filter);
+    filter();
+
+    var grid = document.getElementById('catalogGrid');
+
+    function unblur() { grid.classList.remove('card-grid-blur'); }
+
+    grid.addEventListener('mouseover', function(e) {
+        var card = e.target.closest('.card-item');
+        if (!card || card.style.display === 'none') { unblur(); return; }
+        this.classList.add('card-grid-blur');
+        this.querySelectorAll('.card-item').forEach(function(c) { c.classList.toggle('card-hovered', c === card); });
+    });
+    grid.addEventListener('mouseout', function(e) {
+        if (!e.target.closest('.card-item')) unblur();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') unblur();
+    });
+});
+</script>
+
+{% endblock %}

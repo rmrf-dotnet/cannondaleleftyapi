@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% block title %}API Docs — Cannondale Lefty{% endblock %}
+{% block content %}
+
+<section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24">
+
+    <div class="mb-12">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-ocean/10 border border-ocean/20 text-ocean text-xs font-semibold tracking-wider uppercase mb-4">
+            REST API v1
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white leading-tight mb-4">API Documentation</h1>
+        <p class="text-sm text-slate-500 leading-relaxed max-w-2xl">Public JSON API for the Cannondale Lefty model database. All endpoints return structured data you can use in any project.</p>
+    </div>
+
+    <nav class="sticky top-0 z-10 bg-abyss/95 border-b border-steel py-3 mb-12 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        <div class="flex gap-6 text-sm overflow-x-auto">
+            <a href="#base" class="text-ocean hover:text-sky transition-colors font-medium whitespace-nowrap">Base URL</a>
+            <a href="#list" class="text-slate-400 hover:text-white transition-colors whitespace-nowrap">List Models</a>
+            <a href="#detail" class="text-slate-400 hover:text-white transition-colors whitespace-nowrap">Model Detail</a>
+            <a href="#search" class="text-slate-400 hover:text-white transition-colors whitespace-nowrap">Search</a>
+            <a href="#errors" class="text-slate-400 hover:text-white transition-colors whitespace-nowrap">Errors</a>
+        </div>
+    </nav>
+
+    <article class="space-y-16">
+
+        <section id="base">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <span class="w-1 h-5 bg-gradient-to-b from-ocean to-sky"></span>
+                Base URL
+            </h2>
+            <div class="bg-charcoal border border-steel p-5">
+                <p class="text-sm text-slate-400 mb-3">All API requests are relative to this base URL:</p>
+                <div class="bg-abyss border border-steel px-4 py-3 font-mono text-sm text-ocean break-all">
+                    http://127.0.0.1:5000/api
+                </div>
+                <p class="text-xs text-muted-600 mt-3">Replace with the production URL when deployed.</p>
+            </div>
+        </section>
+
+        <section id="list">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <span class="w-1 h-5 bg-gradient-to-b from-ocean to-sky"></span>
+                List All Models
+            </h2>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-green-900/40 text-green-400 font-mono text-xs font-bold tracking-wider">GET</span>
+                    <span class="font-mono text-sm text-white">/api/models</span>
+                </div>
+
+                <p class="text-sm text-slate-400">Returns a summary of every Lefty model in the database.</p>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Request</span>
+                        <span class="text-[10px] text-muted-600 font-mono">curl</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">curl http://127.0.0.1:5000/api/models</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">JavaScript</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">const res = await fetch('http://127.0.0.1:5000/api/models');
+const data = await res.json();
+// data is an array of model summaries</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Python</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">import requests
+res = requests.get('http://127.0.0.1:5000/api/models')
+data = res.json()
+# data is a list of dicts</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Response</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">[
+  {
+    "category": "lefty_ocho_xc_hardtail",
+    "category_name": "Lefty Ocho XC Hardtail",
+    "model": "F-Si Carbon 2",
+    "travel_front_mm": 100,
+    "travel_rear_mm": 0,
+    "frame": "BallisTec Carbon...",
+    "fork_model": "Lefty Ocho Alloy..."
+  },
+  {
+    "category": "lefty_ocho_xc_hardtail",
+    "category_name": "Lefty Ocho XC Hardtail",
+    "model": "F-Si Carbon 3",
+    ...
+  },
+  ...
+]</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="detail">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <span class="w-1 h-5 bg-gradient-to-b from-ocean to-sky"></span>
+                Model Detail
+            </h2>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-green-900/40 text-green-400 font-mono text-xs font-bold tracking-wider">GET</span>
+                    <span class="font-mono text-sm text-white">/api/model/&lt;category&gt;/&lt;model&gt;</span>
+                </div>
+
+                <p class="text-sm text-slate-400">Returns full specifications for a single model. URL-encode model names with spaces.</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="bg-charcoal border border-steel p-3">
+                        <span class="text-slate-500">Parameter</span>
+                        <span class="block text-white font-mono mt-0.5">category</span>
+                        <span class="text-muted-600 mt-1 block">Category slug from the URL path</span>
+                    </div>
+                    <div class="bg-charcoal border border-steel p-3">
+                        <span class="text-slate-500">Parameter</span>
+                        <span class="block text-white font-mono mt-0.5">model</span>
+                        <span class="text-muted-600 mt-1 block">Model name, URL-encoded</span>
+                    </div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Request</span>
+                        <span class="text-[10px] text-muted-600 font-mono">curl</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">curl "http://127.0.0.1:5000/api/model/lefty_ocho_xc_hardtail/F-Si%20Carbon%202"</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">JavaScript</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">const cat = 'lefty_ocho_xc_hardtail';
+const model = encodeURIComponent('F-Si Carbon 2');
+const res = await fetch(`http://127.0.0.1:5000/api/model/${cat}/${model}`);
+const data = await res.json();</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Response</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">{
+  "category": "lefty_ocho_xc_hardtail",
+  "category_name": "Lefty Ocho XC Hardtail",
+  "model": "F-Si Carbon 2",
+  "specs": {
+    "image": "",
+    "frame": "BallisTec Carbon, SPEED SAVE...",
+    "fork_model": "Lefty Ocho Alloy...",
+    "travel_front_mm": 100,
+    "travel_rear_mm": 0,
+    "rear_shock": "None (Hardtail)",
+    "rear_derailleur": "Shimano XT M8100, 12-speed",
+    "shifters": "Shimano XT M8100, 12-speed",
+    "crankset": "HollowGram, BB30a...",
+    "brakes": "Shimano XT M8100 hydraulic disc",
+    "tires": "Schwalbe Racing Ray EVO...",
+    "connectivity": "Cannondale Wheel Sensor..."
+  }
+}</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="search">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <span class="w-1 h-5 bg-gradient-to-b from-ocean to-sky"></span>
+                Search Models
+            </h2>
+
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <span class="px-2 py-0.5 bg-green-900/40 text-green-400 font-mono text-xs font-bold tracking-wider">GET</span>
+                    <span class="font-mono text-sm text-white">/api/search?q=&lt;query&gt;</span>
+                </div>
+
+                <p class="text-sm text-slate-400">Searches model names, categories, and <strong class="text-white">every spec field</strong> (frame, fork, drivetrain, brakes, etc.). Partial matches are supported.</p>
+
+                <div class="bg-charcoal border border-steel p-4">
+                    <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Query Parameters</h4>
+                    <div class="text-xs">
+                        <div class="flex items-center gap-3 py-1.5 border-b border-steel">
+                            <span class="font-mono text-ocean font-medium">q</span>
+                            <span class="text-slate-400">string (required)</span>
+                            <span class="text-muted-600 ml-auto">Search term, case-insensitive</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Requests</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap"># Search by model name
+curl "http://127.0.0.1:5000/api/search?q=Scalpel"
+
+# Search by component
+curl "http://127.0.0.1:5000/api/search?q=SRAM%20XX1"
+
+# Search by frame material
+curl "http://127.0.0.1:5000/api/search?q=Hi-MOD"
+
+# Search by brake brand
+curl "http://127.0.0.1:5000/api/search?q=Shimano%20XTR"</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">JavaScript</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-sm text-slate-300 overflow-x-auto whitespace-pre-wrap">const query = encodeURIComponent('XX1');
+const res = await fetch(`http://127.0.0.1:5000/api/search?q=${query}`);
+const results = await res.json();
+// results is an array matching the list format</div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Example Response (search "Carbon")</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">[
+  {
+    "category": "lefty_ocho_xc_hardtail",
+    "category_name": "Lefty Ocho XC Hardtail",
+    "model": "F-Si Carbon 2",
+    "specs": { ... }
+  },
+  {
+    "category": "lefty_ocho_full_suspension",
+    "category_name": "Lefty Ocho Full Suspension",
+    "model": "Scalpel Carbon 2 Lefty",
+    "specs": { ... }
+  },
+  ...
+]</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="errors">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                <span class="w-1 h-5 bg-gradient-to-b from-ocean to-sky"></span>
+                Error Handling
+            </h2>
+
+            <div class="space-y-4">
+                <p class="text-sm text-slate-400">The API returns standard HTTP status codes:</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-charcoal border border-steel p-3">
+                        <span class="text-green-400 font-bold font-mono">200</span>
+                        <span class="block text-white mt-0.5">Success</span>
+                        <span class="text-muted-600 mt-1 block">Request succeeded</span>
+                    </div>
+                    <div class="bg-charcoal border border-steel p-3">
+                        <span class="text-yellow-400 font-bold font-mono">404</span>
+                        <span class="block text-white mt-0.5">Not Found</span>
+                        <span class="text-muted-600 mt-1 block">Category or model doesn't exist</span>
+                    </div>
+                    <div class="bg-charcoal border border-steel p-3">
+                        <span class="text-red-400 font-bold font-mono">400</span>
+                        <span class="block text-white mt-0.5">Bad Request</span>
+                        <span class="text-muted-600 mt-1 block">Missing query parameter</span>
+                    </div>
+                </div>
+
+                <div class="border border-steel">
+                    <div class="px-4 py-2 bg-charcoal border-b border-steel">
+                        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Error Response Format</span>
+                    </div>
+                    <div class="px-4 py-3 bg-abyss font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">// 404 response
+{
+  "error": "Model not found"
+}</div>
+                </div>
+
+                <div class="p-4 bg-charcoal border border-steel">
+                    <h4 class="text-xs font-bold text-ocean uppercase tracking-wider mb-2">CORS</h4>
+                    <p class="text-sm text-slate-400">The API runs on Flask's development server. For production use, add CORS headers to allow cross-origin requests from your frontend. Install <code class="text-white font-mono text-xs bg-abyss px-1">flask-cors</code> and wrap the app:</p>
+                    <div class="mt-2 bg-abyss border border-steel px-4 py-3 font-mono text-xs text-slate-300 overflow-x-auto whitespace-pre-wrap">from flask_cors import CORS
+CORS(app)  # Enable all origins</div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="border-t border-steel pt-8">
+                <h3 class="text-sm font-bold text-white mb-4">Quick Reference — All Endpoints</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm border-collapse">
+                        <thead>
+                            <tr class="border-b border-steel">
+                                <th class="text-left py-2 px-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Method</th>
+                                <th class="text-left py-2 px-3 text-xs font-bold text-slate-500 uppercase tracking-wider">Endpoint</th>
+                                <th class="text-left py-2 px-3 text-xs font-bold text-slate-500 uppercase tracking-wider hidden sm:table-cell">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-300">
+                            <tr class="border-b border-steel">
+                                <td class="py-2 px-3"><span class="text-green-400 font-mono text-xs font-bold">GET</span></td>
+                                <td class="py-2 px-3 font-mono text-xs text-white">/api/models</td>
+                                <td class="py-2 px-3 text-xs text-slate-500 hidden sm:table-cell">List all models (summary)</td>
+                            </tr>
+                            <tr class="border-b border-steel">
+                                <td class="py-2 px-3"><span class="text-green-400 font-mono text-xs font-bold">GET</span></td>
+                                <td class="py-2 px-3 font-mono text-xs text-white">/api/model/&lt;cat&gt;/&lt;model&gt;</td>
+                                <td class="py-2 px-3 text-xs text-slate-500 hidden sm:table-cell">Full specs for one model</td>
+                            </tr>
+                            <tr class="border-b border-steel">
+                                <td class="py-2 px-3"><span class="text-green-400 font-mono text-xs font-bold">GET</span></td>
+                                <td class="py-2 px-3 font-mono text-xs text-white">/api/search?q=</td>
+                                <td class="py-2 px-3 text-xs text-slate-500 hidden sm:table-cell">Search across all model data</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <div class="border-t border-steel pt-8 text-center">
+            <p class="text-xs text-muted-600">Built with Flask &middot; Data sourced from official Cannondale specifications</p>
+        </div>
+
+    </article>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}{% if is_search %}Search: {{ search_query }} — {% endif %}Cannondale Lefty API{% endblock %}
+{% block content %}
+
+<section class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-ocean/5 via-transparent to-transparent pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div class="text-center max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-ocean/10 border border-ocean/20 text-ocean text-xs font-semibold tracking-wider uppercase mb-6">
+                <span class="w-1.5 h-1.5 bg-ocean"></span>
+                Lefty Suspension System
+            </div>
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-none mb-4">
+                Explore the<br>
+                <span class="gradient-text">Lefty Universe</span>
+            </h1>
+            <p class="text-lg text-slate-400 max-w-xl mx-auto leading-relaxed">
+                Search and browse every Cannondale Lefty model — from XC race machines to gravel explorers and urban warriors.
+            </p>
+        </div>
+
+        <form action="/search" method="get" class="max-w-2xl mx-auto mt-10">
+            <div class="flex">
+                <input type="text" name="q" value="{{ search_query or '' }}" placeholder="Search models, components, specs..." class="w-full bg-charcoal border border-steel px-5 py-3.5 text-white text-sm focus:outline-none focus:border-ocean transition-all placeholder:text-muted-600">
+                <button type="submit" class="bg-gradient-to-r from-ocean to-sky px-6 py-3.5 text-white text-sm font-semibold hover:from-surf hover:to-sky transition-all duration-300 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </form>
+
+        {% if error %}
+        <div class="max-w-xl mx-auto mt-8 p-4 bg-red-900/20 border border-red-900/30 text-red-400 text-sm text-center">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        {% if is_search and models|length == 0 %}
+        <div class="max-w-xl mx-auto mt-16 text-center">
+            <svg class="w-16 h-16 text-steel mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <p class="text-lg font-medium text-white mb-1">No results found</p>
+            <p class="text-sm text-slate-500">Try a different search term like "Carbon", "XX1", or "Scalpel"</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if not is_search %}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {% for cat_slug, cat in categories.items() %}
+        <div class="bg-charcoal border border-steel p-4 flex items-center gap-3">
+            <div class="w-8 h-8 flex items-center justify-center bg-ocean/10">
+                <svg class="w-4 h-4 text-ocean" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="{{ cat.icon }}"/>
+                </svg>
+            </div>
+            <div>
+                <div class="text-xs font-semibold text-white">{{ cat.name }}</div>
+                <div class="text-[10px] text-slate-500">{{ cat.description[:50] }}{% if cat.description|length > 50 %}...{% endif %}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h2 class="text-2xl font-bold text-white">
+                {% if is_search %}{{ models|length }} Result{% if models|length != 1 %}s{% endif %}{% else %}Featured Models{% endif %}
+            </h2>
+            <p class="text-sm text-slate-500 mt-1">
+                {% if is_search %}for "{{ search_query }}"{% else %}6 randomly selected from the Lefty lineup{% endif %}
+            </p>
+        </div>
+        {% if not is_search %}
+        <a href="/api/models" class="text-sm text-ocean hover:text-sky transition-colors font-medium">View API &rarr;</a>
+        {% endif %}
+    </div>
+
+    {% if models %}
+    <div id="homeGrid" class="card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {% for model in models %}
+        <a href="/model/{{ model.category_slug }}/{{ model.model_name }}" class="card-item group block bg-charcoal border border-steel card-hover animate-in opacity-0 {% if loop.index <= 6 %}animate-in-d{{ loop.index }}{% endif %}">
+            <div class="aspect-[16/10] bg-gradient-to-br from-charcoal to-dark-end flex items-center justify-center relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-ocean/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {% if model.specs.image %}
+                <img src="{{ url_for('static', filename='images/placeholders/' + model.specs.image) }}" alt="{{ model.model_name }}" class="w-full h-full object-cover absolute inset-0">
+                {% else %}
+                <div class="text-center">
+                    <svg class="w-12 h-12 mx-auto text-steel group-hover:text-ocean/40 transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" stroke-width="1"/>
+                    </svg>
+                    <p class="text-[10px] text-muted-600 mt-2 tracking-wider uppercase font-medium">Image Placeholder</p>
+                </div>
+                {% endif %}
+            </div>
+            <div class="p-5 gradient-border">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-semibold text-ocean uppercase tracking-wider">{{ model.category_name }}</span>
+                </div>
+                <h3 class="text-base font-bold text-white group-hover:text-sky transition-colors leading-tight">{{ model.model_name }}</h3>
+                <div class="flex items-center gap-4 mt-3 text-xs text-slate-500">
+                    {% if model.specs.travel_front_mm is defined and model.specs.travel_front_mm > 0 %}
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        {{ model.specs.travel_front_mm }}mm
+                    </span>
+                    {% endif %}
+                    {% if model.specs.frame and 'Carbon' in model.specs.frame %}
+                    <span class="text-ocean/70 font-medium">Carbon</span>
+                    {% elif model.specs.frame and 'Alloy' in model.specs.frame %}
+                    <span class="text-slate-500 font-medium">Alloy</span>
+                    {% endif %}
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+<script>
+var grid = document.getElementById('homeGrid');
+
+function unblur() { grid.classList.remove('card-grid-blur'); }
+
+grid.addEventListener('mouseover', function(e) {
+    var card = e.target.closest('.card-item');
+    if (!card) { unblur(); return; }
+    this.classList.add('card-grid-blur');
+    this.querySelectorAll('.card-item').forEach(function(c) { c.classList.toggle('card-hovered', c === card); });
+});
+grid.addEventListener('mouseout', function(e) {
+    if (!e.target.closest('.card-item')) unblur();
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') unblur();
+});
+</script>
+
+{% endblock %}

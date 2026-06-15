@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ code }} — Cannondale Lefty{% endblock %}
+{% block content %}
+
+<section class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-32">
+    <div class="text-center">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-ocean/10 border border-ocean/20 text-ocean text-xs font-semibold tracking-wider uppercase mb-6">
+            {{ code }} Error
+        </div>
+
+        <div class="text-[8rem] sm:text-[10rem] font-extrabold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-ocean/20 via-ocean/10 to-transparent select-none">
+            {{ code }}
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-bold text-white -mt-4 mb-3">{{ title }}</h1>
+        <p class="text-sm text-slate-500 max-w-md mx-auto mb-10">{{ message }}</p>
+
+        <div class="flex items-center justify-center gap-4">
+            <a href="/" class="bg-gradient-to-r from-ocean to-sky px-6 py-3 text-white text-sm font-semibold hover:from-surf hover:to-sky transition-all duration-300 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                </svg>
+                Back to Home
+            </a>
+            <a href="/catalog" class="px-6 py-3 text-sm text-slate-400 hover:text-white transition-colors border border-steel hover:border-slate-500 flex items-center gap-2">
+                Browse Catalog
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

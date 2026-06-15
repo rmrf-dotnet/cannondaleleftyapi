@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cannondale Lefty API{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="border-b border-steel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center gap-3 group">
+                    <img src="{{ url_for('static', filename='images/cannondalelefty2.png') }}" alt="Cannondale Lefty" class="h-10 w-auto">
+                    <!-- <div class="flex flex-col">
+                        <span class="text-lg font-bold tracking-tight text-white">Cannondale<span class="gradient-text font-extrabold">Lefty</span></span>
+                        <span class="text-[10px] text-slate-500 tracking-[0.15em] uppercase font-medium">API &amp; Database</span>
+                    </div> -->
+                </a>
+                <div class="hidden sm:flex items-center gap-6">
+                    <a href="/" class="text-sm text-slate-400 hover:text-white transition-colors font-medium">Home</a>
+                    <a href="/catalog" class="text-sm text-slate-400 hover:text-white transition-colors font-medium">Catalog</a>
+                    <a href="/wiki" class="text-sm text-slate-400 hover:text-white transition-colors font-medium">Wiki</a>
+                    <a href="/docs" class="text-sm text-slate-400 hover:text-white transition-colors font-medium">Docs</a>
+                    <a href="/api/models" class="text-sm text-slate-400 hover:text-white transition-colors font-medium">API</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="border-t border-steel mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <img src="{{ url_for('static', filename='images/cannondalelefty2.png') }}" alt="Cannondale Lefty" class="h-8 w-auto opacity-60">
+                    <p class="text-sm text-slate-500">API &mdash; data sourced from official specifications</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-none bg-ocean"></span>
+                    <span class="text-xs text-slate-500 tracking-wider uppercase">Lefty Series</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
